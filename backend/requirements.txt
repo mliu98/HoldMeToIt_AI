@@ -1,0 +1,4 @@
+mcp
+flask
+flask-cors
+anthropic
