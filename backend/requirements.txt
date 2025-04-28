@@ -1,4 +1,4 @@
-mcp
+fastmcp
 flask
 flask-cors
 anthropic
