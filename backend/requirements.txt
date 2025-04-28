@@ -1,4 +1,5 @@
-fastmcp
+mcp[cli]
 flask
 flask-cors
 anthropic
+typer

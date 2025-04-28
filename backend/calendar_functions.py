@@ -15,15 +15,12 @@ import anthropic
 from dotenv import load_dotenv
 
 # Initialize FastMCP server
-mcp = FastMCP("goal_tracker")
-load_dotenv()
-
-
+#mcp = FastMCP("goal_tracker")
+#load_dotenv()
 
 import anthropic
 client = anthropic.Anthropic()
 
-@mcp.tool()
 def schedule_goal_tasks(goal_json):
     """ 
         Takes a goal JSON and schedules subtasks as calendar events.
@@ -304,7 +301,7 @@ if __name__ == '__main__':
         }
     
     # Initialize and run the server
-    mcp.run(transport='stdio')    
+    #mcp.run(transport='stdio')    
     schedule_goal_tasks(example_goal)
     
     ''' 
