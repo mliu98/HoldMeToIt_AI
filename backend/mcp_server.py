@@ -5,13 +5,41 @@ import json
 from datetime import datetime, timedelta
 import anthropic
 from dotenv import load_dotenv
+import os
+import sys
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server
-mcp = FastMCP("goal_tracker")
-load_dotenv()
+try:
+    mcp = FastMCP("goal_tracker")
+    logger.info("FastMCP initialized successfully")
+except Exception as e:
+    logger.error(f"Failed to initialize FastMCP: {str(e)}")
+    sys.exit(1)
+
+# Load environment variables
+try:
+    load_dotenv()
+    logger.info("Environment variables loaded")
+except Exception as e:
+    logger.error(f"Failed to load environment variables: {str(e)}")
+    sys.exit(1)
 
 # Initialize Anthropic client
-client = anthropic.Anthropic()
+try:
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        logger.error("ANTHROPIC_API_KEY not found in environment variables")
+        sys.exit(1)
+    client = anthropic.Anthropic(api_key=api_key)
+    logger.info("Anthropic client initialized successfully")
+except Exception as e:
+    logger.error(f"Failed to initialize Anthropic client: {str(e)}")
+    sys.exit(1)
 
 def format_timeline(tasks: List[Dict[str, Any]]) -> str:
     """Format the timeline data into a readable string."""
@@ -36,35 +64,46 @@ def break_down_goal(goal: str) -> str:
     """
     try:
         # Use Claude to break down the goal
-        system_prompt = """You are a goal breakdown assistant. Break down the given goal into 5 specific tasks.
-        For each task, provide:
-        1. A clear goal title
-        2. Detailed description
-        3. Estimated duration in days
-        4. Dependencies (if any)
-        5. Key milestones
-        
-        IMPORTANT: Your response must be a valid JSON array containing task objects. Each task object must have these exact fields:
-        {
-            "title": "string",
-            "description": "string",
-            "estimated_duration": "X days",
-            "dependencies": ["string"],
-            "milestones": ["string"]
-        }
-        
-        Example response format:
-        [
-            {
-                "title": "Task 1",
-                "description": "Description of task 1",
-                "estimated_duration": "5 days",
-                "dependencies": [],
-                "milestones": ["Milestone 1", "Milestone 2"]
-            }
-        ]
-        
-        Do not include any additional text or explanation outside the JSON array."""
+        system_prompt = """
+        You are a goal intake assistant that helps users define and structure their goals using best-practice goal-setting frameworks like SMART and Atomic Habits.
+
+Your objective is to **converse naturally** with the user and **progressively collect the required parameters** for the goal. Only ask for one thing at a time.
+
+### Framework Use
+- If the goal sounds like a **one-time project**, use the **SMART** framework.
+- If the goal is about **habits or routines**, use **Atomic Habits**.
+- You do NOT need to tell the user which framework you’re using — just guide them through the questions naturally.
+
+### Required Parameters
+You must collect:
+- `goal`: The user's goal in their own words.
+- `specific`, `measurable`, `achievable`, `relevant`, `time_bound`: (if SMART-style goal)
+- `cue`, `habit`, `reward`: (if Atomic Habits-style)
+- `start_date`: When they want to start
+- `end_date`: When they want to finish (or build a timeline from duration)
+
+### Flow Rules
+- Be conversational: Ask friendly, direct questions one at a time.
+- Infer which framework to use based on the goal.
+- Keep track of what’s been answered.
+- Once all required parameters are collected, summarize them in **natural language** and then in a **valid JSON object** like below:
+```json
+{
+  "goal": "string",
+  "framework": "SMART or Atomic Habits",
+  "parameters": {
+    "specific": "...",
+    "measurable": "...",
+    "achievable": "...",
+    "relevant": "...",
+    "time_bound": "..."
+  },
+  "start_date": "YYYY-MM-DD",
+  "end_date": "YYYY-MM-DD"
+}
+
+        """
+
 
         response = client.messages.create(
             model="claude-3-7-sonnet-20250219",
@@ -127,7 +166,11 @@ def break_down_goal(goal: str) -> str:
         return f"Error breaking down goal: {str(e)}\nResponse text: {response_text if 'response_text' in locals() else 'No response'}"
 
 if __name__ == "__main__":
-    # Initialize and run the server
-    mcp.run(transport='stdio')
+    try:
+        logger.info("Starting MCP server...")
+        mcp.run(transport='stdio')
+    except Exception as e:
+        logger.error(f"Error running MCP server: {str(e)}")
+        sys.exit(1)
     # print(break_down_goal("write a book about my life"))
     
