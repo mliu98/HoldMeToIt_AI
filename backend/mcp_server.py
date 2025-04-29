@@ -128,6 +128,6 @@ def break_down_goal(goal: str) -> str:
 
 if __name__ == "__main__":
     # Initialize and run the server
-    mcp.run(transport='stdio')
-    # print(break_down_goal("write a book about my life"))
+    # mcp.run(transport='stdio')
+    print(break_down_goal("write a book about my life"))
     
