@@ -143,8 +143,8 @@ class ReminderTool:
             }
             
             payload = {
-                "model": "claude-3-opus-20240229",
-                "max_tokens": 4000,
+                "model": "claude-3-7-sonnet-20250219",
+                "max_tokens": 1000,
                 "system": calendar_prompt,
                 "messages": [
                     {

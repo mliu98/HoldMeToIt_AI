@@ -13,13 +13,8 @@ import json
 from datetime import datetime, timedelta
 import anthropic
 from dotenv import load_dotenv
-
-# Initialize FastMCP server
-#mcp = FastMCP("goal_tracker")
-#load_dotenv()
-
 import anthropic
-client = anthropic.Anthropic()
+
 
 def schedule_goal_tasks(goal_json):
     """ 
@@ -63,8 +58,8 @@ def schedule_goal_tasks(goal_json):
     """
     
     try:
+
         # Get response from Claude
-    
         response = client.messages.create(
             model="claude-3-7-sonnet-20250219",
             max_tokens=1000,
@@ -77,13 +72,14 @@ def schedule_goal_tasks(goal_json):
                 }
             ]
         )
+        #print("RESPONSE: ", response)
         
         # Get the response text and clean it
         response_text = response.content[0].text.strip()
+        print("RESPONSE_TEXT: ", response_text)
 
-        
         # Parse the response
-        tasks_raw = response.choices[0].message.content.strip().split('\n')
+        tasks_raw = response_text.split('\n')
         
         # Schedule each task
         scheduled_events = []
@@ -116,9 +112,17 @@ def schedule_goal_tasks(goal_json):
         print(f"Error scheduling tasks: {e}")
         return None
 
+def get_calendar_events(start_time=None, end_time=None):
+    """
+    Gets events from Google Calendar within the specified timeframe.
+    
+    Parameters:
+    - start_time: datetime object or None. If None, defaults to current time
+    - end_time: datetime object or None. If None, defaults to 30 days from start_time
 
-def get_calendar_events():
-    """Gets events from Google Calendar for the next week."""
+    Returns:
+    - List of formatted calendar events
+    """
     creds = None
     # The file token.pickle stores the user's access and refresh tokens
     if os.path.exists('token.pickle'):
@@ -139,20 +143,25 @@ def get_calendar_events():
 
     service = build('calendar', 'v3', credentials=creds)
 
-    # Call the Calendar API
-    now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    one_week_later = (datetime.utcnow() + timedelta(days=7)).isoformat() + 'Z'
+    # Set default timeframe if not provided
+    if start_time is None:
+        start_time = datetime.utcnow()
+    if end_time is None:
+        end_time = start_time + timedelta(days=30)
+
+    # Convert to RFC3339 format
+    time_min = start_time.isoformat() + 'Z' if isinstance(start_time, datetime) else start_time
+    time_max = end_time.isoformat() + 'Z' if isinstance(end_time, datetime) else end_time
     
-    print('Getting events for the next week...')
     events_result = service.events().list(calendarId='primary', 
-                                        timeMin=now,
-                                        timeMax=one_week_later,
+                                        timeMin=time_min,
+                                        timeMax=time_max,
                                         singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
     if not events:
-        print('No upcoming events found.')
+        print('No events found in the specified timeframe.')
         return []
     
     # Process and return the events
@@ -177,7 +186,6 @@ def get_calendar_events():
         print(f"{start_formatted} - {event.get('summary', 'No title')}")
     
     return formatted_events
-
 
 def create_calendar_event(summary, start_time, end_time, description=None, location=None, attendees=None, timezone='UTC'):
     """
@@ -251,21 +259,14 @@ def create_calendar_event(summary, start_time, end_time, description=None, locat
     try:
 
         # Call the Calendar API
-        now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        one_week_later = (datetime.utcnow() + timedelta(days=7)).isoformat() + 'Z'
 
-        print("\nNOW: ", now)
-        print("ONE_WEEK_LATER: ", one_week_later)
-
-        print("\nSTART_TIME: ", start_time)
-        print("END_TIME: ", end_time, "\n")
+        #print("\nSTART_TIME: ", start_time)
+        #print("END_TIME: ", end_time, "\n")
         
         existing_events = service.events().list(
             calendarId='primary',
             timeMin=start_time,
             timeMax=end_time,
-            #timeMin=now,
-            #timeMax=one_week_later,
             singleEvents=True,
             orderBy='startTime'
         ).execute()
@@ -274,7 +275,9 @@ def create_calendar_event(summary, start_time, end_time, description=None, locat
             print(f"Event not created: There are {len(existing_events['items'])} existing events during this time period")
             return None
         else:
+            print("\nEvent body: ", event_body)
             event = service.events().insert(calendarId='primary', body=event_body).execute()
+            ##TODO: Call Gauri's function to set reminders for the event
             print(f"Event created: {event.get('htmlLink')}")
             return event
     
@@ -288,16 +291,25 @@ if __name__ == '__main__':
     SCOPES = ['https://www.googleapis.com/auth/calendar.readonly', 
               'https://www.googleapis.com/auth/calendar.events.owned']
     
+    # Initialize FastMCP server
+    mcp = FastMCP("goal_tracker")
+    load_dotenv()
+
+    # Set the Anthropic API key
+    os.environ['ANTHROPIC_API_KEY'] = "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"
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    client = anthropic.Anthropic(api_key=api_key)
+
     example_goal = {
-        "goal_statement":     "To run a 5k",
+        "goal_statement":     "Studying for the CFA Level 1 exam",
         "success_metrics":    "How progress/completion will be measured",
         "importance_context": "Why this matters/motivation",
         "current_state":      "Assessment of starting point",
-        "sub_tasks":          "Short 30 minute runs",
+        "sub_tasks":          "Short 30 minute study sessions",
         "potential_obstacles":"Anticipated challenges",
         "resources_needed":   "Tools, information, or support required",
         "start_date":         "2025-05-01",
-        "end_date":           "2025-06-01"
+        "end_date":           "2025-05-02"
         }
     
     # Initialize and run the server
