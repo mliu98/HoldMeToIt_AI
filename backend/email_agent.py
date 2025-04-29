@@ -3,7 +3,6 @@ import datetime
 from email.utils import make_msgid
 from typing import Dict, List, Any
 import logging
-from reminder_agent import send_reminder_email
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +53,7 @@ Preparation Needs: {', '.join(event_details.get('preparation_needs', []))}
 {message}"""
 
                 # Send the email
+                from email_with_llm_reminder import send_reminder_email
                 sent = await send_reminder_email(
                     email,
                     full_message,

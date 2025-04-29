@@ -1,7 +1,9 @@
 import asyncio
 import datetime
-from email_with_llm_reminder import ReminderTool
+import json
+from reminder_agent import ReminderTool
 from email_scheduler import EmailScheduler
+from calendar_functions import get_calendar_events, get_calendar_events_json
 
 async def test_knitting_reminders():
     # Example objective data
@@ -93,42 +95,12 @@ async def test_knitting_reminders():
         ]
     }
 
-    # Example calendar events
-    calendar_events = [
-        {
-            "event_id": "first_knitting_lesson",
-            "title": "First Knitting Lesson",
-            "description": "Learn basic knitting techniques and practice casting on",
-            "start_time": "2025-04-27 18:00",
-            "end_time": "2025-04-27 20:00",
-            "location": "Home",
-            "related_milestone": "Learn to cast on",
-            "preparation_needs": ["Knitting needles", "Yarn", "Online tutorial"],
-            "importance": "High"
-        },
-        {
-            "event_id": "pattern_practice_session",
-            "title": "Pattern Practice Session",
-            "description": "Practice creating different stitch patterns",
-            "start_time": "2025-05-05 18:00",
-            "end_time": "2025-05-05 20:00",
-            "location": "Home",
-            "related_milestone": "Create garter stitch swatch",
-            "preparation_needs": ["Knitting needles", "Yarn", "Pattern guide"],
-            "importance": "High"
-        },
-        {
-            "event_id": "scarf_project_start",
-            "title": "Start Scarf Project",
-            "description": "Begin working on the scarf project",
-            "start_time": "2025-05-12 18:00",
-            "end_time": "2025-05-12 20:00",
-            "location": "Home",
-            "related_milestone": "Cast on for scarf",
-            "preparation_needs": ["Knitting needles", "Scarf yarn", "Pattern"],
-            "importance": "High"
-        }
-    ]
+    # Get calendar events and convert to JSON
+    events = get_calendar_events()
+    calendar_events_json = get_calendar_events_json(events)
+    
+    # Parse the JSON back to a list of dictionaries
+    calendar_events = json.loads(calendar_events_json)
 
     # Initialize the reminder tool and scheduler
     tool = ReminderTool()
@@ -147,9 +119,9 @@ async def test_knitting_reminders():
         print("------------------")
         for reminder in reminders:
             # Find the corresponding calendar event
-            event = next((e for e in calendar_events if e["event_id"] == reminder["related_task"]), None)
+            event = next((e for e in calendar_events if e["summary"] == reminder["related_task"]), None)
             if event:
-                print(f"\nEvent: {event['title']}")
+                print(f"\nEvent: {event['summary']}")
                 print(f"Time: {reminder['scheduled_time'].strftime('%Y-%m-%d %H:%M')}")
                 print(f"Message: {reminder['message']}")
                 print(f"Priority: {reminder['priority']}")
@@ -162,9 +134,9 @@ async def test_knitting_reminders():
         print("----------------")
         for email in emails:
             # Find the corresponding calendar event
-            event = next((e for e in calendar_events if e["event_id"] == email["event_id"]), None)
+            event = next((e for e in calendar_events if e["summary"] == email["event_id"]), None)
             if event:
-                print(f"\nEvent: {event['title']}")
+                print(f"\nEvent: {event['summary']}")
                 print(f"Subject: {email['subject']}")
                 print(f"Send Time: {email['send_time'].strftime('%Y-%m-%d %H:%M')}")
                 print(f"Message: {email['message']}")
