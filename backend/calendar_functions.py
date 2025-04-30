@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 # Initialize FastMCP server
 #mcp = FastMCP("goal_tracker")
-#load_dotenv()
+load_dotenv()
 
 import anthropic
 client = anthropic.Anthropic()
@@ -81,7 +81,7 @@ def schedule_goal_tasks(goal_json):
         # Get the response text and clean it
         response_text = response.content[0].text.strip()
 
-        
+        print(response)
         # Parse the response
         tasks_raw = response.choices[0].message.content.strip().split('\n')
         

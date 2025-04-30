@@ -10,6 +10,7 @@ from anthropic import Anthropic
 from dotenv import load_dotenv
 import os
 import threading
+import json
 
 load_dotenv()
 
@@ -27,6 +28,9 @@ class MCPClientWrapper:
         self.loop = asyncio.new_event_loop()
         self.thread = threading.Thread(target=self._run_event_loop, daemon=True)
         self.thread.start()
+        self.chat_history = []  # Store chat history
+        self.system_prompt = """You are a helpful goal analysis and scheduling agent with a bunch of tools. 
+                                  When you are using a tool, please state the tool name with a [], for example, [break_down_goal]. Also, try to format and list the details return from the tool."""
 
     def _run_event_loop(self):
         asyncio.set_event_loop(self.loop)
@@ -62,9 +66,11 @@ class MCPClientWrapper:
         future = asyncio.run_coroutine_threadsafe(self._connect_to_server(server_script_path), self.loop)
         return future.result()
 
-    async def _process_query(self, query: str) -> str:
+    async def _process_query(self, query: str) -> tuple[str, str]:
         """Process a query using Claude and available tools"""
-        messages = [{"role": "user", "content": query}]
+        # Add user message to history
+        self.chat_history.append({"role": "user", "content": query})
+        messages = self.chat_history.copy()  # Use a copy of chat history
 
         response = await self.session.list_tools()
         available_tools = [{
@@ -75,7 +81,8 @@ class MCPClientWrapper:
 
         # Initial Claude API call
         response = self.anthropic.messages.create(
-            model="claude-3-5-sonnet-20241022",
+            model="claude-3-7-sonnet-20250219",
+            system=self.system_prompt,
             max_tokens=5000,
             messages=messages,
             tools=available_tools
@@ -84,47 +91,104 @@ class MCPClientWrapper:
         # Process response and handle tool calls
         final_text = []
         assistant_message_content = []
+        tool_results = []
 
         for content in response.content:
             if content.type == 'text':
                 final_text.append(content.text)
-                assistant_message_content.append(content)
+                # Store text content as a string instead of TextContent object
+                assistant_message_content.append({"type": "text", "text": content.text})
             elif content.type == 'tool_use':
                 tool_name = content.name
                 tool_args = content.input
+                tool_use_id = content.id
 
-                # Execute tool call
-                result = await self.session.call_tool(tool_name, tool_args)
-                
-                assistant_message_content.append(content)
-                messages.append({
-                    "role": "assistant",
-                    "content": assistant_message_content
-                })
-                messages.append({
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": content.id,
-                            "content": result.content
-                        }
-                    ]
-                })
+                try:
+                    # Execute tool call
+                    result = await self.session.call_tool(tool_name, tool_args)
+                    tool_results.append({
+                        "tool_name": tool_name,
+                        "tool_args": tool_args,
+                        "result": result.content[0].text
+                    })
+                    
+                    # Store tool use content as a dictionary with tool_use_id
+                    assistant_message_content.append({
+                        "type": "tool_use",
+                        "id": tool_use_id,
+                        "name": tool_name,
+                        "input": tool_args
+                    })
+                    
+                    # Add the assistant message with tool use to chat history
+                    self.chat_history.append({
+                        "role": "assistant",
+                        "content": assistant_message_content
+                    })
+                    
+                    # Add the tool result immediately after the tool use
+                    # Format the tool result content correctly
+                    tool_result_content = []
+                    for content_item in result.content:
+                        if hasattr(content_item, 'text'):
+                            tool_result_content.append({"type": "text", "text": content_item.text})
+                        else:
+                            # Handle other content types if needed
+                            tool_result_content.append({"type": "text", "text": str(content_item)})
+                    
+                    print(tool_result_content)
+                    # Add tool result to chat history
+                    self.chat_history.append({
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_use_id,
+                                "content": tool_result_content
+                            }
+                        ]
+                    })
 
-                # Get next response from Claude
-                response = self.anthropic.messages.create(
-                    model="claude-3-5-sonnet-20241022",
-                    max_tokens=1000,
-                    messages=messages,
-                    tools=available_tools
-                )
+                    # Get next response from Claude using the updated chat history
+                    response = self.anthropic.messages.create(
+                        model="claude-3-7-sonnet-20250219",
+                        system=self.system_prompt,
+                        max_tokens=5000,
+                        messages=self.chat_history,
+                        tools=available_tools
+                    )
 
-                final_text.append(response.content[0].text)
+                    if response.content:
+                        final_text.append(response.content[0].text)
+                        # Add Claude's final response to chat history
+                        self.chat_history.append({
+                            "role": "assistant",
+                            "content": [{"type": "text", "text": response.content[0].text}]
+                        })
+                except Exception as e:
+                    print(f"Error executing tool {tool_name}: {str(e)}")
+                    tool_results.append({
+                        "tool_name": tool_name,
+                        "tool_args": tool_args,
+                        "result": f"Error: {str(e)}"
+                    })
+                    
+                    # Add error result for the tool use to chat history
+                    self.chat_history.append({
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_use_id,
+                                "content": [{"type": "text", "text": f"Error: {str(e)}"}]
+                            }
+                        ]
+                    })
 
-        return "\n".join(final_text)
+        # Return both the chat response and tool results
+        return "\n".join(final_text), json.dumps(tool_results)
 
-    def process_query(self, query: str) -> str:
+    def process_query(self, query: str) -> tuple[str, str]:
         """Sync wrapper for process_query"""
         future = asyncio.run_coroutine_threadsafe(self._process_query(query), self.loop)
         return future.result()
@@ -157,8 +221,8 @@ def chat():
             mcp_client.connect_to_server('mcp_server.py')
         
         # Process the query
-        response = mcp_client.process_query(query)
-        return jsonify({'response': response})
+        response, tool_results = mcp_client.process_query(query)
+        return jsonify({'response': response, 'tool_results': tool_results})
     except Exception as e:
         print(f"Error processing query: {str(e)}")
         return jsonify({'error': str(e)}), 500

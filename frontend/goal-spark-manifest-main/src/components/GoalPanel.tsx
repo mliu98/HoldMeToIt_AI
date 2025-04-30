@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { ArrowLeft, Calendar, CheckCircle, Circle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeft, Calendar, CheckCircle, Circle, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GoalStep } from "./GoalStep";
 
@@ -15,10 +14,24 @@ interface TimelineTask {
   }[];
 }
 
-export function GoalPanel() {
-  const [goal] = useState("Complete the React project by the end of the month");
-  const [deadline] = useState("April 30, 2025");
-  const [timelineTasks] = useState<TimelineTask[]>([
+interface GoalPanelProps {
+  timelineTasks?: TimelineTask[];
+  goal?: string;
+  deadline?: string;
+  onBackClick?: () => void;
+  onReturnToChat?: () => void;
+}
+
+export function GoalPanel({ 
+  timelineTasks: propTimelineTasks, 
+  goal: propGoal,
+  deadline: propDeadline,
+  onBackClick, 
+  onReturnToChat 
+}: GoalPanelProps) {
+  const [goal, setGoal] = useState(propGoal || "Complete the React project by the end of the month");
+  const [deadline, setDeadline] = useState(propDeadline || "April 30, 2025");
+  const [timelineTasks, setTimelineTasks] = useState<TimelineTask[]>([
     {
       id: 1,
       text: "Project Setup Phase",
@@ -47,6 +60,30 @@ export function GoalPanel() {
       ]
     }
   ]);
+
+  // Update goal and deadline when props change
+  useEffect(() => {
+    if (propGoal) {
+      setGoal(propGoal);
+    }
+    if (propDeadline) {
+      setDeadline(propDeadline);
+    }
+  }, [propGoal, propDeadline]);
+
+  // Update timeline tasks when prop changes
+  useEffect(() => {
+    console.log("GoalPanel received propTimelineTasks:", propTimelineTasks);
+    console.log("GoalPanel propTimelineTasks length:", propTimelineTasks?.length || 0);
+    
+    if (propTimelineTasks && propTimelineTasks.length > 0) {
+      console.log("Setting timeline tasks in GoalPanel");
+      setTimelineTasks(propTimelineTasks);
+      console.log("GoalPanel state after update:", propTimelineTasks);
+    } else {
+      console.log("GoalPanel: No timeline tasks received or empty array");
+    }
+  }, [propTimelineTasks]);
 
   const toggleSubtask = (taskId: number, subtaskId: number) => {
     // Implementation would go here if state management was needed
@@ -93,13 +130,19 @@ export function GoalPanel() {
                       <span className="text-sm text-muted-foreground">{task.date}</span>
                     </div>
                     <div className="space-y-2">
-                      {task.subtasks.map(subtask => (
-                        <GoalStep
-                          key={subtask.id}
-                          step={subtask}
-                          onClick={() => toggleSubtask(task.id, subtask.id)}
-                        />
-                      ))}
+                      {task.subtasks && task.subtasks.length > 0 ? (
+                        task.subtasks.map(subtask => (
+                          <GoalStep
+                            key={subtask.id}
+                            step={subtask}
+                            onClick={() => toggleSubtask(task.id, subtask.id)}
+                          />
+                        ))
+                      ) : (
+                        <div className="text-sm text-muted-foreground italic">
+                          No subtasks defined yet
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -109,10 +152,25 @@ export function GoalPanel() {
         </div>
       </div>
       
-      <div className="p-3 border-t bg-white rounded-b-lg">
-        <Button variant="outline" size="sm" className="flex items-center gap-1">
+      <div className="p-3 border-t bg-white rounded-b-lg flex justify-between">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={onBackClick}
+        >
           <ArrowLeft size={14} />
           <span>Back to Goals</span>
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={onReturnToChat}
+        >
+          <MessageSquare size={14} />
+          <span>Return to Chat</span>
         </Button>
       </div>
     </div>
