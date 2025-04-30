@@ -10,6 +10,7 @@ import requests
 import smtplib
 from email.message import EmailMessage
 from email.utils import make_msgid
+import time
 
 # Set up logging
 logging.basicConfig(
@@ -23,229 +24,162 @@ logger = logging.getLogger("mcp_reminder_tool")
 load_dotenv()
 
 # System prompt for the LLM
-SYSTEM_PROMPT = """
-You are an intelligent reminder scheduler for goals and tasks. Your job is to analyze a user's objective and task breakdown to create optimal reminder schedules that align with both.
+SYSTEM_PROMPT = """You are a reminder generation assistant. Your task is to create reminders for calendar events based on the user's learning objectives and tasks.
 
-You will receive two JSON objects:
-1. The user's high-level objective with context, constraints, and deadlines
-2. A detailed task breakdown with specific dates, dependencies, and milestones
-
-Create a schedule of reminders that will help the user achieve their goal by connecting reminders to specific tasks, phases of work, and the overall objective. Reminders should be timed based on:
-- Task start and end dates
-- Task dependencies and transitions
-- Milestone achievements
-- The overall objective deadline
-
-For each task, create reminders that:
-1. Align with specific milestones in the task
-2. Provide guidance for achieving each milestone
-3. Check progress towards milestone completion
-4. Celebrate milestone achievements
-
-Each reminder should include:
-- A specific datetime (formatted as ISO-8601)
-- A helpful message relevant to the current task/phase/milestone
-- The related task title
-- The specific milestone it relates to (if applicable)
-- A priority level (1-10)
-- A phase indicator (preparation, execution, completion, transition)
-
-Return a JSON object with the following structure:
+IMPORTANT: Your response must be a valid, complete JSON object with the following structure:
 {
-  "reminders": [
-    {
-      "datetime": "2025-04-28T09:00:00",
-      "message": "Start your baseline fitness assessment today. Measure your current 1-mile time and record your heart rate.",
-      "related_task": "Establish Baseline Fitness",
-      "related_milestone": "Complete 1-mile timed assessment",
-      "priority": 7,
-      "phase": "preparation"
-    },
-    // Additional reminders...
-  ]
+    "event_reminders": [
+        {
+            "event_id": "string",  // Unique identifier for the event
+            "reminders": [
+                {
+                    "datetime": "YYYY-MM-DD HH:mm",  // When to send the reminder
+                    "message": "string",  // The reminder message
+                    "priority": number,  // 1-10, where 10 is highest priority
+                    "phase": "string"  // "preparation", "execution", or "follow_up"
+                }
+            ]
+        }
+    ]
 }
+
+Keep your response concise and focused on generating the JSON. Do not include any explanatory text outside the JSON block.
+Ensure all JSON is properly formatted and complete. Do not use ellipsis (...) or truncate the JSON.
+Each reminder should be actionable and specific to the event and learning objectives.
+
+Remember:
+1. All dates must be in "YYYY-MM-DD HH:mm" format
+2. Priority must be between 1 and 10
+3. Phase must be one of: "preparation", "execution", "follow_up"
+4. Each event must have at least one reminder
+5. Messages should be clear and actionable
 """
 
 class ReminderTool:
-    def __init__(self):
-        """Initialize in-memory storage"""
-        self.reminders = []
-        self.post_event_emails = []
+    def __init__(self, client):
+        self.client = client
+        self.post_event_emails = {}
         logger.info("Reminder tool initialized")
     
-    async def generate_reminders_for_calendar_events(self, objective_data: Dict[str, Any], task_data: Dict[str, Any], calendar_events: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Generate reminders for calendar events using LLM"""
+    def generate_reminders_for_calendar_events(self, objective: Dict[str, Any], task_data: Dict[str, Any], calendar_events: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Generate reminders for calendar events"""
         try:
-            # Set up Claude API request
-            api_key = os.getenv("ANTHROPIC_API_KEY")
-            if not api_key:
-                return {"success": False, "message": "Missing LLM API key"}
+            # Format calendar events for the prompt
+            events_text = "\n".join([
+                f"{event['start']} - {event['summary']}"
+                for event in calendar_events
+            ])
             
-            # Format input data
-            input_json = json.dumps({
-                "objective": objective_data,
-                "task_breakdown": task_data,
-                "calendar_events": calendar_events
-            }, indent=2)
-            
-            # Create system prompt for calendar event reminders
-            calendar_prompt = """
-            You are an intelligent reminder scheduler that determines the optimal times to send reminders for calendar events.
-            
-            Analyze the following information to determine the best reminder schedule:
-            1. Calendar event details (time, duration, type)
-            2. Related task and milestone
-            3. User's work schedule and preferences
-            4. Event preparation needs
-            5. Post-event follow-up requirements
-            
-            For each calendar event, determine:
-            1. How many reminders are needed before the event
-            2. When each reminder should be sent
-            3. The optimal time of day for each reminder
-            4. A motivational message to send after the event
-            
-            Consider:
-            - Event type and importance
-            - Preparation time needed
-            - User's schedule and preferences
-            - Natural breaks in the day
-            - Post-event reflection and motivation
-            
-            Return a JSON object with the following structure:
-            {
-                "event_reminders": [
-                    {
-                        "event_id": "event_123",
-                        "reminders": [
-                            {
-                                "datetime": "YYYY-MM-DD HH:MM",
-                                "message": "Reminder message",
-                                "priority": 1-10,
-                                "phase": "preparation/execution"
-                            }
-                        ],
-                        "post_event_email": {
-                            "subject": "Email subject",
-                            "message": "Motivational message",
-                            "send_time": "YYYY-MM-DD HH:MM"
+            # Create a more structured prompt
+            prompt = f"""Given these calendar events:
+{events_text}
+
+And this learning objective:
+{json.dumps(objective, indent=2)}
+
+And these tasks:
+{json.dumps(task_data, indent=2)}
+
+Generate a complete reminder schedule that helps achieve the objective while considering the calendar events.
+Your response must be ONLY the JSON object, with no additional text or explanation.
+Do not use markdown code blocks. Just return the raw JSON object.
+Do not truncate or use ellipsis. Each reminder must be complete.
+
+The response must be a valid JSON object with this structure:
+{{
+    "event_reminders": [
+        {{
+            "event_id": "string",  // Unique identifier for the event
+            "reminders": [
+                {{
+                    "datetime": "YYYY-MM-DD HH:mm",  // When to send the reminder
+                    "message": "string",  // The reminder message
+                    "priority": number,  // 1-10, where 10 is highest priority
+                    "phase": "string"  // "preparation", "execution", or "follow_up"
+                }}
+            ]
+        }}
+    ]
+}}"""
+
+            # Get response from LLM with increased max tokens
+            response = self.client.messages.create(
+                model="claude-3-opus-20240229",
+                max_tokens=4000,
+                temperature=0.7,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            # Extract JSON from response
+            if response.content and len(response.content) > 0:
+                response_text = response.content[0].text
+                logger.debug(f"Raw LLM response: {response_text}")
+                
+                # Try to extract JSON
+                data = self.extract_json_from_text(response_text)
+                if data:
+                    # Process reminders
+                    successful_reminders = 0
+                    successful_emails = 0
+                    
+                    for event_reminder in data["event_reminders"]:
+                        try:
+                            event_id = event_reminder["event_id"]
+                            
+                            # Process each reminder
+                            for reminder in event_reminder["reminders"]:
+                                try:
+                                    # Parse datetime
+                                    scheduled_time = datetime.datetime.strptime(reminder["datetime"], "%Y-%m-%d %H:%M")
+                                    
+                                    # Store in memory
+                                    self.post_event_emails[event_id] = {
+                                        "event_id": event_id,
+                                        "subject": reminder.get("subject", f"Reminder: {event_id}"),
+                                        "message": reminder["message"],
+                                        "send_time": scheduled_time,
+                                        "status": "pending"
+                                    }
+                                    successful_emails += 1
+                                except Exception as e:
+                                    logger.warning(f"Error processing reminder: {str(e)}")
+                                    continue
+                        except Exception as e:
+                            logger.warning(f"Error processing event reminder: {str(e)}")
+                            continue
+                    
+                    if not self.post_event_emails:
+                        return {"success": False, "message": "No valid post-event emails were created"}
+                    
+                    return {
+                        "success": True,
+                        "message": f"Created {successful_emails} post-event emails",
+                        "details": {
+                            "total_events": len(data["event_reminders"]),
+                            "successful_emails": successful_emails
                         }
                     }
-                ]
-            }
-            """
-            
-            # Make API request to Claude
-            headers = {
-                "x-api-key": api_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json"
-            }
-            
-            payload = {
-                "model": "claude-3-7-sonnet-20250219",
-                "max_tokens": 1000,
-                "system": calendar_prompt,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": f"Please analyze these calendar events and create an optimal reminder schedule:\n\n{input_json}"
-                    }
-                ]
-            }
-            
-            # Add retry logic for API calls
-            max_retries = 3
-            retry_delay = 1  # seconds
-            
-            for attempt in range(max_retries):
-                try:
-                    response = requests.post(
-                        "https://api.anthropic.com/v1/messages",
-                        headers=headers,
-                        json=payload
-                    )
-                    
-                    if response.status_code == 200:
-                        break
-                    elif response.status_code == 502 and attempt < max_retries - 1:
-                        logger.warning(f"API error 502, retrying in {retry_delay} seconds...")
-                        await asyncio.sleep(retry_delay)
-                        retry_delay *= 2
-                        continue
-                    else:
-                        return {"success": False, "message": f"LLM API error: {response.status_code}"}
-                except Exception as e:
-                    if attempt < max_retries - 1:
-                        logger.warning(f"API request failed, retrying in {retry_delay} seconds...")
-                        await asyncio.sleep(retry_delay)
-                        retry_delay *= 2
-                        continue
-                    else:
-                        raise e
-            
-            # Extract and parse response
-            response_data = response.json()
-            response_text = response_data.get("content", [{}])[0].get("text", "")
-            
-            # Extract JSON from response
-            reminders_data = extract_json_from_text(response_text)
-            
-            if not reminders_data or "event_reminders" not in reminders_data:
-                return {"success": False, "message": "Failed to parse valid reminders from LLM response"}
-            
-            # Store reminders and schedule post-event emails
-            for event_reminder in reminders_data["event_reminders"]:
-                event_id = event_reminder["event_id"]
                 
-                # Store reminders
-                for reminder in event_reminder["reminders"]:
-                    reminder_id = f"rem_{uuid.uuid4().hex[:8]}"
-                    scheduled_time = datetime.datetime.strptime(reminder["datetime"], "%Y-%m-%d %H:%M")
-                    
-                    # Store in memory
-                    self.reminders.append({
-                        "id": reminder_id,
-                        "message": reminder["message"],
-                        "scheduled_time": scheduled_time,
-                        "status": "pending",
-                        "related_task": event_id,
-                        "priority": reminder["priority"],
-                        "phase": reminder["phase"],
-                        "email": "user@example.com"  # Replace with actual email
-                    })
-                
-                # Schedule post-event email
-                post_event = event_reminder["post_event_email"]
-                send_time = datetime.datetime.strptime(post_event["send_time"], "%Y-%m-%d %H:%M")
-                
-                # Store post-event email
-                self.post_event_emails.append({
-                    "event_id": event_id,
-                    "subject": post_event["subject"],
-                    "message": post_event["message"],
-                    "send_time": send_time,
-                    "status": "pending"
-                })
+                # If extraction failed, log the error
+                logger.error(f"Failed to extract JSON from response: {response_text[:200]}...")
+                return {"success": False, "message": "Failed to extract JSON from LLM response"}
             
-            return {
-                "success": True,
-                "message": f"Created reminders and scheduled post-event emails for {len(reminders_data['event_reminders'])} events"
-            }
-            
+            logger.error("Empty response from LLM")
+            return {"success": False, "message": "Empty response from LLM"}
         except Exception as e:
             logger.error(f"Error generating calendar event reminders: {str(e)}")
             return {"success": False, "message": f"Error: {str(e)}"}
     
-    async def process_pending_reminders(self) -> Dict[str, Any]:
+    def process_pending_reminders(self) -> Dict[str, Any]:
         """Process and send due reminders"""
         try:
             now = datetime.datetime.now()
             
             # Find pending reminders that are due
             due_reminders = [
-                r for r in self.reminders 
-                if r["scheduled_time"] <= now and r["status"] == "pending"
+                e for e in self.post_event_emails.values() 
+                if e["send_time"] <= now and e["status"] == "pending"
             ]
             
             if not due_reminders:
@@ -254,28 +188,28 @@ class ReminderTool:
             sent_count = 0
             failed_count = 0
             
-            for reminder in due_reminders:
+            for email in due_reminders:
                 # Send email
-                sent = await send_reminder_email(
-                    reminder["email"],
-                    reminder["message"],
-                    reminder.get("subject", f"Reminder: {reminder['related_task']}"),  # Use reminder's subject if available
-                    reminder["phase"],
+                sent = self.send_reminder_email(
+                    "user@example.com",  # Replace with actual email
+                    email["message"],
+                    email["subject"],
+                    "completion",
                     msg_id=None,
                     references=None
                 )
                 
                 if sent:
                     # Mark as sent
-                    reminder["status"] = "sent"
-                    reminder["sent_at"] = now
+                    email["status"] = "sent"
+                    email["sent_at"] = now
                     sent_count += 1
                 else:
                     failed_count += 1
             
             return {
                 "success": True,
-                "message": f"Processed {sent_count} reminders ({failed_count} failed)",
+                "message": f"Processed {sent_count} post-event emails ({failed_count} failed)",
                 "count": sent_count
             }
             
@@ -283,14 +217,14 @@ class ReminderTool:
             logger.error(f"Error processing reminders: {str(e)}")
             return {"success": False, "message": f"Error: {str(e)}"}
     
-    async def process_pending_post_event_emails(self) -> Dict[str, Any]:
+    def process_pending_post_event_emails(self) -> Dict[str, Any]:
         """Process and send pending post-event emails"""
         try:
             now = datetime.datetime.now()
             
             # Find pending post-event emails that are due
             due_emails = [
-                e for e in self.post_event_emails 
+                e for e in self.post_event_emails.values() 
                 if e["send_time"] <= now and e["status"] == "pending"
             ]
             
@@ -302,10 +236,10 @@ class ReminderTool:
             
             for email in due_emails:
                 # Send email
-                sent = await send_reminder_email(
+                sent = self.send_reminder_email(
                     "user@example.com",  # Replace with actual email
                     email["message"],
-                    f"Post-Event: {email['event_id']}",
+                    email["subject"],
                     "completion",
                     msg_id=None,
                     references=None
@@ -329,15 +263,296 @@ class ReminderTool:
             logger.error(f"Error processing post-event emails: {str(e)}")
             return {"success": False, "message": f"Error: {str(e)}"}
     
-    def get_all_reminders(self) -> List[Dict[str, Any]]:
-        """Get all reminders"""
-        return self.reminders
-    
     def get_all_post_event_emails(self) -> List[Dict[str, Any]]:
         """Get all post-event emails"""
-        return self.post_event_emails
+        return list(self.post_event_emails.values())
 
-async def send_reminder_email(email: str, message: str, subject: str, phase: str, msg_id: str = None, references: str = None) -> bool:
+    def get_all_reminders(self) -> List[Dict[str, Any]]:
+        """Get all reminders"""
+        reminders = []
+        for email in self.post_event_emails.values():
+            if email["status"] == "pending":
+                reminders.append({
+                    "event_id": email["event_id"],
+                    "message": email["message"],
+                    "send_time": email["send_time"],
+                    "subject": email["subject"]
+                })
+        return reminders
+
+    def generate_reminders(self, objective: Dict[str, Any], calendar_events: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        """Generate reminders based on objective and calendar events"""
+        try:
+            # Format calendar events for the prompt
+            events_text = "\n".join([
+                f"{event['start']} - {event['summary']}"
+                for event in calendar_events
+            ])
+            
+            # Create a more structured prompt
+            prompt = f"""Given these calendar events:
+{events_text}
+
+And this learning objective:
+{json.dumps(objective, indent=2)}
+
+Generate a complete reminder schedule that helps achieve the objective while considering the calendar events.
+Your response must be ONLY the JSON object, with no additional text or explanation.
+Do not use markdown code blocks. Just return the raw JSON object.
+Do not truncate or use ellipsis. Each reminder must be complete."""
+
+            # Get response from LLM with increased max tokens
+            response = self.client.messages.create(
+                model="claude-3-opus-20240229",
+                max_tokens=4000,
+                temperature=0.7,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            # Extract JSON from response
+            if response.content and len(response.content) > 0:
+                response_text = response.content[0].text
+                logger.debug(f"Raw LLM response: {response_text}")
+                
+                # Try to extract JSON
+                data = self.extract_json_from_text(response_text)
+                if data:
+                    return data
+                
+                # If extraction failed, try to fix common issues
+                cleaned_text = response_text.strip()
+                if cleaned_text.startswith('```json'):
+                    cleaned_text = cleaned_text[7:]
+                if cleaned_text.endswith('```'):
+                    cleaned_text = cleaned_text[:-3]
+                cleaned_text = cleaned_text.strip()
+                
+                try:
+                    data = json.loads(cleaned_text)
+                    if self.validate_reminder_data(data):
+                        return data
+                except json.JSONDecodeError:
+                    pass
+                
+                # If still no valid JSON, log the error
+                logger.error(f"Failed to extract JSON from response: {response_text[:200]}...")
+                return None
+            
+            logger.error("Empty response from LLM")
+            return None
+        except Exception as e:
+            logger.error(f"Error generating reminders: {str(e)}")
+            return None
+
+    def extract_json_from_text(self, text: str) -> Optional[Dict[str, Any]]:
+        """Extract JSON from response text"""
+        try:
+            # First try to find JSON in code blocks
+            json_start = text.find("```json")
+            if json_start != -1:
+                json_start += 7  # Skip ```json
+                json_end = text.find("```", json_start)
+                if json_end != -1:
+                    json_text = text[json_start:json_end].strip()
+                    try:
+                        data = json.loads(json_text)
+                        if self.validate_reminder_data(data):
+                            return data
+                        else:
+                            logger.error("Extracted JSON failed validation")
+                            return None
+                    except json.JSONDecodeError as e:
+                        logger.error(f"JSON decode error in code block: {str(e)}")
+                        return None
+            
+            # If no code block, try to find standalone JSON
+            json_start = text.find("{")
+            if json_start != -1:
+                # Find the last complete object in the JSON
+                stack = []
+                in_string = False
+                escape_next = False
+                last_complete_end = -1
+                
+                for i in range(json_start, len(text)):
+                    char = text[i]
+                    
+                    if escape_next:
+                        escape_next = False
+                        continue
+                        
+                    if char == '\\':
+                        escape_next = True
+                        continue
+                        
+                    if char == '"' and not escape_next:
+                        in_string = not in_string
+                        continue
+                        
+                    if not in_string:
+                        if char == '{':
+                            stack.append(i)
+                        elif char == '}':
+                            if stack:
+                                stack.pop()
+                                if not stack:  # Found a complete object
+                                    last_complete_end = i
+                
+                if last_complete_end != -1:
+                    json_text = text[json_start:last_complete_end + 1].strip()
+                    try:
+                        data = json.loads(json_text)
+                        if self.validate_reminder_data(data):
+                            return data
+                        else:
+                            logger.error("Extracted JSON failed validation")
+                            return None
+                    except json.JSONDecodeError:
+                        # If the JSON is incomplete, try to fix common issues
+                        json_text = json_text.replace('\n', ' ').replace('\r', '')
+                        json_text = json_text.replace('...', '')  # Remove ellipsis
+                        json_text = json_text.replace('  ', ' ')  # Remove double spaces
+                        try:
+                            data = json.loads(json_text)
+                            if self.validate_reminder_data(data):
+                                return data
+                            else:
+                                logger.error("Extracted JSON failed validation after cleanup")
+                                return None
+                        except json.JSONDecodeError as e:
+                            logger.error(f"JSON decode error after cleanup: {str(e)}")
+                            return None
+            
+            # If still no JSON found, try to extract just the event_reminders array
+            event_reminders_start = text.find('"event_reminders":')
+            if event_reminders_start != -1:
+                # Find the start of the array
+                array_start = text.find('[', event_reminders_start)
+                if array_start != -1:
+                    # Find the matching closing bracket
+                    stack = []
+                    in_string = False
+                    escape_next = False
+                    
+                    for i in range(array_start, len(text)):
+                        char = text[i]
+                        
+                        if escape_next:
+                            escape_next = False
+                            continue
+                            
+                        if char == '\\':
+                            escape_next = True
+                            continue
+                            
+                        if char == '"' and not escape_next:
+                            in_string = not in_string
+                            continue
+                            
+                        if not in_string:
+                            if char == '[':
+                                stack.append(i)
+                            elif char == ']':
+                                if stack:
+                                    stack.pop()
+                                    if not stack:  # Found the matching closing bracket
+                                        json_text = text[array_start:i+1].strip()
+                                        try:
+                                            data = {"event_reminders": json.loads(json_text)}
+                                            if self.validate_reminder_data(data):
+                                                return data
+                                            else:
+                                                logger.error("Extracted event_reminders failed validation")
+                                                return None
+                                        except json.JSONDecodeError:
+                                            # Try to fix common issues
+                                            json_text = json_text.replace('\n', ' ').replace('\r', '')
+                                            json_text = json_text.replace('...', '')
+                                            json_text = json_text.replace('  ', ' ')
+                                            try:
+                                                data = {"event_reminders": json.loads(json_text)}
+                                                if self.validate_reminder_data(data):
+                                                    return data
+                                                else:
+                                                    logger.error("Extracted event_reminders failed validation after cleanup")
+                                                    return None
+                                            except json.JSONDecodeError as e:
+                                                logger.error(f"JSON decode error after cleanup: {str(e)}")
+                                                return None
+            
+            logger.error("No valid JSON found in response")
+            return None
+        except Exception as e:
+            logger.error(f"Error extracting JSON: {str(e)}")
+            return None
+
+    def validate_reminder_data(self, data: Dict[str, Any]) -> bool:
+        """Validate reminder data structure"""
+        try:
+            if not isinstance(data, dict):
+                logger.error("Data is not a dictionary")
+                return False
+            
+            if "event_reminders" not in data:
+                logger.error("Missing event_reminders key")
+                return False
+            
+            if not isinstance(data["event_reminders"], list):
+                logger.error("event_reminders is not a list")
+                return False
+            
+            for event in data["event_reminders"]:
+                if not isinstance(event, dict):
+                    logger.error("Event is not a dictionary")
+                    return False
+                
+                if "event_id" not in event:
+                    logger.error("Missing event_id")
+                    return False
+                
+                if "reminders" not in event:
+                    logger.error("Missing reminders")
+                    return False
+                
+                if not isinstance(event["reminders"], list):
+                    logger.error("Reminders is not a list")
+                    return False
+                
+                for reminder in event["reminders"]:
+                    if not isinstance(reminder, dict):
+                        logger.error("Reminder is not a dictionary")
+                        return False
+                    
+                    required_fields = ["datetime", "message", "priority", "phase"]
+                    for field in required_fields:
+                        if field not in reminder:
+                            logger.error(f"Missing {field} in reminder")
+                            return False
+                    
+                    if not isinstance(reminder["priority"], (int, float)):
+                        logger.error("Priority is not a number")
+                        return False
+                    
+                    if not (1 <= reminder["priority"] <= 10):
+                        logger.error("Priority must be between 1 and 10")
+                        return False
+                    
+                    if not isinstance(reminder["phase"], str):
+                        logger.error("Phase is not a string")
+                        return False
+                    
+                    valid_phases = ["preparation", "execution", "follow_up"]
+                    if reminder["phase"] not in valid_phases:
+                        logger.error(f"Invalid phase: {reminder['phase']}")
+                        return False
+            
+            return True
+        except Exception as e:
+            logger.error(f"Error validating reminder data: {str(e)}")
+            return False
+
+def send_reminder_email(email: str, message: str, subject: str, phase: str, msg_id: str = None, references: str = None) -> bool:
     """Send reminder email"""
     if not email:
         return False
@@ -389,27 +604,3 @@ async def send_reminder_email(email: str, message: str, subject: str, phase: str
     except Exception as e:
         logger.error(f"Failed to send email: {str(e)}")
         return False
-
-def extract_json_from_text(text: str) -> Optional[Dict[str, Any]]:
-    """Extract JSON from response text"""
-    try:
-        # Look for JSON blocks
-        json_start = text.find("```json")
-        if json_start != -1:
-            json_start += 7  # Skip ```json
-            json_end = text.find("```", json_start)
-            if json_end != -1:
-                json_text = text[json_start:json_end].strip()
-                return json.loads(json_text)
-        
-        # Try to find standalone JSON
-        json_start = text.find("{")
-        if json_start != -1:
-            json_end = text.rfind("}")
-            if json_end != -1 and json_end > json_start:
-                json_text = text[json_start:json_end + 1].strip()
-                return json.loads(json_text)
-        
-        return None
-    except json.JSONDecodeError:
-        return None

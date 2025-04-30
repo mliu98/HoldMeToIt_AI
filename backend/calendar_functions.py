@@ -15,8 +15,7 @@ import anthropic
 from dotenv import load_dotenv
 import anthropic
 
-
-def schedule_goal_tasks(goal_json):
+def schedule_goal_tasks(goal_json, client):
     """ 
         Takes a goal JSON and schedules subtasks as calendar events.
         
@@ -32,6 +31,10 @@ def schedule_goal_tasks(goal_json):
             "start_date":         "When work on the goal begins",
             "end_date":           "Deadline for goal completion"
         }
+        
+        Args:
+            goal_json: Dictionary containing goal information
+            client: Anthropic client instance for making API calls
     """
 
     print("Scheduling goal tasks...")
@@ -314,7 +317,7 @@ if __name__ == '__main__':
     
     # Initialize and run the server
     #mcp.run(transport='stdio')    
-    schedule_goal_tasks(example_goal)
+    schedule_goal_tasks(example_goal, client)
     
     ''' 
     events = get_calendar_events()

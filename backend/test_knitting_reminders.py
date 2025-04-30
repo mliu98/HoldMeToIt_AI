@@ -1,11 +1,18 @@
-import asyncio
 import datetime
 import json
+import os
+from anthropic import Anthropic
 from reminder_agent import ReminderTool
 from email_scheduler import EmailScheduler
 from calendar_functions import get_calendar_events, get_calendar_events_json
 
-async def test_knitting_reminders():
+def test_knitting_reminders():
+    # Initialize Anthropic client
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
+    client = Anthropic(api_key=api_key)
+
     # Example objective data
     objective_data = {
         "primary_objective": "Learn to knit and complete a simple project",
@@ -103,30 +110,15 @@ async def test_knitting_reminders():
     calendar_events = json.loads(calendar_events_json)
 
     # Initialize the reminder tool and scheduler
-    tool = ReminderTool()
+    tool = ReminderTool(client)
     scheduler = EmailScheduler()
     
     # Generate reminders for calendar events
-    result = await tool.generate_reminders_for_calendar_events(objective_data, task_data, calendar_events)
+    result = tool.generate_reminders_for_calendar_events(objective_data, task_data, calendar_events)
     
     if result["success"]:
         print("\nGenerated Knitting Learning Reminders:")
         print("====================================")
-        
-        # Show pre-event reminders
-        reminders = tool.get_all_reminders()
-        print("\nPre-Event Reminders:")
-        print("------------------")
-        for reminder in reminders:
-            # Find the corresponding calendar event
-            event = next((e for e in calendar_events if e["summary"] == reminder["related_task"]), None)
-            if event:
-                print(f"\nEvent: {event['summary']}")
-                print(f"Time: {reminder['scheduled_time'].strftime('%Y-%m-%d %H:%M')}")
-                print(f"Message: {reminder['message']}")
-                print(f"Priority: {reminder['priority']}")
-                print(f"Phase: {reminder['phase']}")
-                print("-" * 50)
         
         # Show post-event emails
         emails = tool.get_all_post_event_emails()
@@ -146,21 +138,17 @@ async def test_knitting_reminders():
         print("===============================")
         
         # Update email addresses
-        for reminder in reminders:
-            reminder["email"] = "galada108@yahoo.com"
-        
         for email in emails:
             email["email"] = "galada108@yahoo.com"
         
         # Schedule all reminders and emails
-        await scheduler.schedule_reminders(reminders, calendar_events)
-        await scheduler.schedule_post_event_emails(emails, calendar_events)
+        scheduler.schedule_post_event_emails(emails, calendar_events)
         
         # Wait for all scheduled tasks to complete
-        await scheduler.wait_for_completion()
+        scheduler.wait_for_completion()
         
     else:
         print(f"Error: {result['message']}")
 
 if __name__ == "__main__":
-    asyncio.run(test_knitting_reminders()) 
+    test_knitting_reminders() 
