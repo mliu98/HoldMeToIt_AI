@@ -2,7 +2,7 @@ Based on your provided code and project description, here’s a professional and
 
 ---
 
-# 🧠 Goal Assistant: Your AI-Powered Goal Planning Coach
+# 🧠 HoldMeToIt AI - Turn Goal Into Progress
 
 **Goal Assistant** is a full-stack productivity app that helps users set goals, break them down into actionable tasks, schedule them on their Google Calendar, and receive reminders via email. The project features an interactive chatbot frontend and a backend powered by a custom **MCP** server, integrating advanced language models and calendar automation.
 
