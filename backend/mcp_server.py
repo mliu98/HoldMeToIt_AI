@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+
+from reminder_agent import send_reminder_email
 import os
 import sys
 import logging
@@ -44,6 +46,8 @@ except Exception as e:
     logger.error(f"Failed to initialize Anthropic client: {str(e)}")
     sys.exit(1)
 
+
+    
 def create_calendar_event(summary, start_time, end_time, description=None, location=None, attendees=None, timezone='UTC'):
     SCOPES = ['https://www.googleapis.com/auth/calendar.readonly', 
               'https://www.googleapis.com/auth/calendar.events.owned']
@@ -151,6 +155,54 @@ def create_calendar_event(summary, start_time, end_time, description=None, locat
             "status": "error",
             "message": str(e)
         })
+
+@mcp.tool()
+def send_email(scheduled_tasks):
+    """
+    Take in subtasks/break down tasks: goal_json from tool <scheduled_tasks>, 
+     [{{
+            "TaskName": "Phase Name - Task Name",
+            "StartDateTime": "2025-05-03 07:00",
+            "EndDateTime": "2025-05-03 08:00",
+            "Description": "Detailed description of the task"
+        }}, ... ]
+    """
+
+    instruction = f"""
+    Please format the scheduled_tasks in a proper plan format that can be display in a email body: {scheduled_tasks}
+    """
+
+    response = client.messages.create(
+            model="claude-3-7-sonnet-20250219",
+            max_tokens=5000,
+            temperature=0.7,
+            system="You are a email assistant, that your job is to format the given content into a format that can sent in a google email. Please only return the email body without anything else.",
+            messages=[
+                {
+                    "role": "user",
+                    "content": instruction
+                }
+            ]
+        )
+        
+    # Get the response text and clean it
+    response_text = response.content[0].text.strip()
+    print("LLM Response:", response_text)
+
+    full_message = response_text
+    try:
+        sent = send_reminder_email(email="ai.goals.coach@gmail.com",  
+                                   subject="🎯Goal Assistant - Your plan is ready!", 
+                                   message=full_message,
+                                   phase="completion",
+                                   msg_id=None,
+                                   references=None
+        )
+        if sent:
+            return f"Successfully sent email."
+    except Exception as e:
+        return f"Failed sending the email. {e}"
+
     
 
 @mcp.tool()
@@ -276,11 +328,12 @@ def schedule_goal_tasks(goal_json):
         
         # Return the results
         if scheduled_events:
-            return json.dumps({
+            print(json.dumps({
                 "status": "success",
                 "message": f"Successfully scheduled {len(scheduled_events)} tasks",
                 "events": scheduled_events
-            })
+            }))
+            return json.dumps(scheduled_tasks)
         else:
             return json.dumps({
                 "status": "error",

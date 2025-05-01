@@ -965,3 +965,420 @@ Based on the calendar events and objective to learn knitting, I've created an op
 2025-04-29 23:07:24,086 - INFO - file_cache is only supported with oauth2client<4.0.0
 2025-04-29 23:07:24,456 - INFO - Reminder tool initialized
 2025-04-29 23:08:19,094 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 18:42:08,691 - INFO - FastMCP initialized successfully
+2025-04-30 18:42:08,691 - INFO - Environment variables loaded
+2025-04-30 18:42:08,743 - INFO - Anthropic client initialized successfully
+2025-04-30 18:42:08,779 - INFO - Starting MCP server...
+2025-04-30 18:42:08,800 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:42:48,709 - INFO - FastMCP initialized successfully
+2025-04-30 18:42:48,709 - INFO - Environment variables loaded
+2025-04-30 18:42:48,808 - INFO - Anthropic client initialized successfully
+2025-04-30 18:42:48,808 - INFO - Starting MCP server...
+2025-04-30 18:42:48,832 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:47:52,896 - INFO - FastMCP initialized successfully
+2025-04-30 18:47:52,896 - INFO - Environment variables loaded
+2025-04-30 18:47:52,988 - INFO - Anthropic client initialized successfully
+2025-04-30 18:47:52,991 - INFO - Starting MCP server...
+2025-04-30 18:47:53,007 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:47:56,009 - INFO - FastMCP initialized successfully
+2025-04-30 18:47:56,009 - INFO - Environment variables loaded
+2025-04-30 18:47:56,105 - INFO - Anthropic client initialized successfully
+2025-04-30 18:47:56,105 - INFO - Starting MCP server...
+2025-04-30 18:47:56,136 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:48:00,366 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:48:10,692 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:48:13,689 - INFO - Processing request of type CallToolRequest
+2025-04-30 18:48:19,961 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 18:48:40,844 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:48:48,120 - INFO - Processing request of type CallToolRequest
+2025-04-30 18:49:00,579 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 18:49:00,817 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:01,505 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:02,104 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:02,656 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:03,319 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:04,021 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:04,708 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:05,337 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:49:05,973 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:50:22,852 - INFO - FastMCP initialized successfully
+2025-04-30 18:50:22,852 - INFO - Environment variables loaded
+2025-04-30 18:50:22,960 - INFO - Anthropic client initialized successfully
+2025-04-30 18:50:22,963 - INFO - Starting MCP server...
+2025-04-30 18:50:22,976 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:50:43,112 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:50:54,427 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:50:57,191 - INFO - Processing request of type CallToolRequest
+2025-04-30 18:51:02,214 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 18:51:16,643 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:51:22,386 - INFO - Processing request of type CallToolRequest
+2025-04-30 18:51:32,583 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 18:51:32,613 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:51:33,270 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:51:33,853 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:51:34,453 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:51:35,052 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:51:35,649 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 18:53:06,967 - INFO - FastMCP initialized successfully
+2025-04-30 18:53:06,967 - INFO - Environment variables loaded
+2025-04-30 18:53:07,104 - INFO - Anthropic client initialized successfully
+2025-04-30 18:53:07,106 - INFO - Starting MCP server...
+2025-04-30 18:53:07,120 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:53:53,513 - INFO - FastMCP initialized successfully
+2025-04-30 18:53:53,514 - INFO - Environment variables loaded
+2025-04-30 18:53:53,693 - INFO - Anthropic client initialized successfully
+2025-04-30 18:53:53,698 - INFO - Starting MCP server...
+2025-04-30 18:53:53,705 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:55:15,993 - INFO - FastMCP initialized successfully
+2025-04-30 18:55:15,993 - INFO - Environment variables loaded
+2025-04-30 18:55:16,082 - INFO - Anthropic client initialized successfully
+2025-04-30 18:55:16,082 - INFO - Starting MCP server...
+2025-04-30 18:55:16,104 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:55:28,410 - INFO - FastMCP initialized successfully
+2025-04-30 18:55:28,410 - INFO - Environment variables loaded
+2025-04-30 18:55:28,499 - INFO - Anthropic client initialized successfully
+2025-04-30 18:55:28,516 - INFO - Starting MCP server...
+2025-04-30 18:55:28,523 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:55:43,949 - INFO - FastMCP initialized successfully
+2025-04-30 18:55:43,949 - INFO - Environment variables loaded
+2025-04-30 18:55:44,032 - INFO - Anthropic client initialized successfully
+2025-04-30 18:55:44,032 - INFO - Starting MCP server...
+2025-04-30 18:55:44,056 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:56:34,009 - INFO - FastMCP initialized successfully
+2025-04-30 18:56:34,009 - INFO - Environment variables loaded
+2025-04-30 18:56:34,099 - INFO - Anthropic client initialized successfully
+2025-04-30 18:56:34,100 - INFO - Starting MCP server...
+2025-04-30 18:56:34,119 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:57:17,076 - INFO - FastMCP initialized successfully
+2025-04-30 18:57:17,076 - INFO - Environment variables loaded
+2025-04-30 18:57:17,164 - INFO - Anthropic client initialized successfully
+2025-04-30 18:57:17,181 - INFO - Starting MCP server...
+2025-04-30 18:57:17,189 - INFO - Processing request of type ListToolsRequest
+2025-04-30 18:58:14,184 - INFO - FastMCP initialized successfully
+2025-04-30 18:58:14,197 - INFO - Environment variables loaded
+2025-04-30 18:58:14,280 - INFO - Anthropic client initialized successfully
+2025-04-30 18:58:14,280 - INFO - Starting MCP server...
+2025-04-30 18:58:14,304 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:06:41,075 - INFO - FastMCP initialized successfully
+2025-04-30 19:06:41,075 - INFO - Environment variables loaded
+2025-04-30 19:06:41,178 - INFO - Anthropic client initialized successfully
+2025-04-30 19:06:41,178 - INFO - Starting MCP server...
+2025-04-30 19:06:41,197 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:11:30,005 - INFO - FastMCP initialized successfully
+2025-04-30 19:11:30,005 - INFO - Environment variables loaded
+2025-04-30 19:11:30,104 - INFO - Anthropic client initialized successfully
+2025-04-30 19:11:30,104 - INFO - Starting MCP server...
+2025-04-30 19:11:30,130 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:11:45,336 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:11:48,165 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:11:54,334 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:12:45,609 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:12:51,873 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:13:04,587 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:13:04,616 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:04,925 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:05,520 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:05,793 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:06,368 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:06,969 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:07,244 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:07,920 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:08,470 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:13:34,058 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:13:44,465 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:13:51,836 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:13:52,432 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials af79cd13be357-7cacdef27cesm29537885a.111 - gsmtp')
+2025-04-30 19:17:42,940 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:19:02,346 - INFO - FastMCP initialized successfully
+2025-04-30 19:19:02,346 - INFO - Environment variables loaded
+2025-04-30 19:19:02,450 - INFO - Anthropic client initialized successfully
+2025-04-30 19:19:02,467 - INFO - Starting MCP server...
+2025-04-30 19:19:02,482 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:19:05,745 - INFO - FastMCP initialized successfully
+2025-04-30 19:19:05,745 - INFO - Environment variables loaded
+2025-04-30 19:19:05,831 - INFO - Anthropic client initialized successfully
+2025-04-30 19:19:05,847 - INFO - Starting MCP server...
+2025-04-30 19:19:05,867 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:19:06,044 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:19:21,293 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:19:24,885 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:19:30,466 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:19:56,306 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:20:01,987 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:20:13,301 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:20:13,301 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:14,281 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:15,048 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:15,897 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:16,139 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:16,652 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:16,920 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:20:17,481 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:21:19,890 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:21:29,790 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:21:37,145 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:21:37,772 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 6a1803df08f44-6f4fe835693sm15074136d6.73 - gsmtp')
+2025-04-30 19:30:13,194 - INFO - FastMCP initialized successfully
+2025-04-30 19:30:13,194 - INFO - Environment variables loaded
+2025-04-30 19:30:13,300 - INFO - Anthropic client initialized successfully
+2025-04-30 19:30:13,305 - INFO - Starting MCP server...
+2025-04-30 19:30:13,317 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:30:16,138 - INFO - FastMCP initialized successfully
+2025-04-30 19:30:16,138 - INFO - Environment variables loaded
+2025-04-30 19:30:16,240 - INFO - Anthropic client initialized successfully
+2025-04-30 19:30:16,245 - INFO - Starting MCP server...
+2025-04-30 19:30:16,261 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:30:38,785 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:30:42,136 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:30:47,571 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:31:28,466 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:31:33,958 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:31:44,016 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:31:44,047 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:31:44,347 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:31:44,609 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:31:45,221 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:31:45,509 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:31:45,819 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:32:02,984 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:32:10,933 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:32:17,122 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:32:17,678 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 6a1803df08f44-6f4fe6ad5d6sm15264096d6.14 - gsmtp')
+2025-04-30 19:34:21,520 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials af79cd13be357-7cacdef26ddsm31991585a.99 - gsmtp')
+2025-04-30 19:38:35,258 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials af79cd13be357-7cacde7bc0bsm33508485a.44 - gsmtp')
+2025-04-30 19:39:24,030 - ERROR - Failed to send email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 6a1803df08f44-6f4fe6d18f3sm15316576d6.35 - gsmtp')
+2025-04-30 19:40:04,526 - ERROR - Failed to send email: Connection unexpectedly closed
+2025-04-30 19:40:44,579 - ERROR - Failed to send email: Connection unexpectedly closed
+2025-04-30 19:46:36,104 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 19:47:34,487 - INFO - FastMCP initialized successfully
+2025-04-30 19:47:34,489 - INFO - Environment variables loaded
+2025-04-30 19:47:34,583 - INFO - Anthropic client initialized successfully
+2025-04-30 19:47:34,588 - INFO - Starting MCP server...
+2025-04-30 19:47:34,604 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:47:37,430 - INFO - FastMCP initialized successfully
+2025-04-30 19:47:37,431 - INFO - Environment variables loaded
+2025-04-30 19:47:37,526 - INFO - Anthropic client initialized successfully
+2025-04-30 19:47:37,530 - INFO - Starting MCP server...
+2025-04-30 19:47:37,545 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:48:15,997 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:48:18,675 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:48:23,731 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:48:42,076 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:48:47,727 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:48:56,735 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:48:57,077 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:48:57,892 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:48:58,429 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:48:59,082 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:48:59,529 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:48:59,797 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:49:13,709 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:49:21,292 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:49:26,471 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:49:27,577 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 19:51:14,585 - INFO - FastMCP initialized successfully
+2025-04-30 19:51:14,586 - INFO - Environment variables loaded
+2025-04-30 19:51:14,689 - INFO - Anthropic client initialized successfully
+2025-04-30 19:51:14,694 - INFO - Starting MCP server...
+2025-04-30 19:51:14,710 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:51:29,390 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:51:32,185 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:51:38,069 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:51:57,351 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:52:03,645 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:52:15,754 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:53:31,533 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:53:36,773 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:53:48,672 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:54:29,192 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:54:32,414 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:54:38,302 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:54:56,112 - INFO - FastMCP initialized successfully
+2025-04-30 19:54:56,112 - INFO - Environment variables loaded
+2025-04-30 19:54:56,212 - INFO - Anthropic client initialized successfully
+2025-04-30 19:54:56,226 - INFO - Starting MCP server...
+2025-04-30 19:54:56,248 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:54:59,083 - INFO - FastMCP initialized successfully
+2025-04-30 19:54:59,092 - INFO - Environment variables loaded
+2025-04-30 19:54:59,177 - INFO - Anthropic client initialized successfully
+2025-04-30 19:54:59,182 - INFO - Starting MCP server...
+2025-04-30 19:54:59,192 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:55:03,543 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:55:18,732 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:55:23,483 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:55:28,833 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:55:54,572 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:56:00,802 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:56:09,633 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:56:09,659 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:09,973 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:10,506 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:10,772 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:11,012 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:11,312 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:56:31,493 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:56:40,103 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:56:49,123 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:56:50,342 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 19:58:07,822 - INFO - FastMCP initialized successfully
+2025-04-30 19:58:07,822 - INFO - Environment variables loaded
+2025-04-30 19:58:07,918 - INFO - Anthropic client initialized successfully
+2025-04-30 19:58:07,922 - INFO - Starting MCP server...
+2025-04-30 19:58:07,937 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:58:15,892 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:58:18,123 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:58:23,223 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:58:54,873 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:58:58,643 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:59:04,813 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:59:22,063 - INFO - Processing request of type ListToolsRequest
+2025-04-30 19:59:28,483 - INFO - Processing request of type CallToolRequest
+2025-04-30 19:59:37,694 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 19:59:37,716 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:38,072 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:38,613 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:38,913 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:39,243 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:39,563 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 19:59:59,473 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:00:07,683 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:00:14,013 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:00:15,313 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 20:01:33,531 - INFO - FastMCP initialized successfully
+2025-04-30 20:01:33,533 - INFO - Environment variables loaded
+2025-04-30 20:01:33,623 - INFO - Anthropic client initialized successfully
+2025-04-30 20:01:33,628 - INFO - Starting MCP server...
+2025-04-30 20:01:33,649 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:01:36,910 - INFO - FastMCP initialized successfully
+2025-04-30 20:01:36,911 - INFO - Environment variables loaded
+2025-04-30 20:01:36,994 - INFO - Anthropic client initialized successfully
+2025-04-30 20:01:36,999 - INFO - Starting MCP server...
+2025-04-30 20:01:37,013 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:01:40,372 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:01:43,673 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:01:50,072 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:02:06,033 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:02:13,313 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:02:28,212 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:02:28,233 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:28,862 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:29,162 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:29,435 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:30,142 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:30,452 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:30,723 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:31,243 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:31,833 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:02:52,073 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:03:03,337 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:03:11,775 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:03:13,432 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 20:03:23,291 - INFO - FastMCP initialized successfully
+2025-04-30 20:03:23,292 - INFO - Environment variables loaded
+2025-04-30 20:03:23,386 - INFO - Anthropic client initialized successfully
+2025-04-30 20:03:23,390 - INFO - Starting MCP server...
+2025-04-30 20:03:23,407 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:03:36,603 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:03:38,988 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:03:46,431 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:04:03,603 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:04:10,313 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:04:24,140 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:04:24,157 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:24,453 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:25,087 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:25,353 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:26,000 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:26,533 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:26,903 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:27,471 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:04:27,825 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:08:12,048 - INFO - FastMCP initialized successfully
+2025-04-30 20:08:12,049 - INFO - Environment variables loaded
+2025-04-30 20:08:12,138 - INFO - Anthropic client initialized successfully
+2025-04-30 20:08:12,144 - INFO - Starting MCP server...
+2025-04-30 20:08:12,158 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:08:15,021 - INFO - FastMCP initialized successfully
+2025-04-30 20:08:15,022 - INFO - Environment variables loaded
+2025-04-30 20:08:15,116 - INFO - Anthropic client initialized successfully
+2025-04-30 20:08:15,121 - INFO - Starting MCP server...
+2025-04-30 20:08:15,137 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:08:28,973 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:08:31,823 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:08:37,782 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:08:54,883 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:09:00,863 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:09:10,193 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:09:10,214 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:09:10,813 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:09:11,452 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:09:11,963 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:09:12,553 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:09:13,112 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:10:59,783 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:11:07,928 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:11:13,732 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:11:14,743 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 20:12:56,293 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:13:10,193 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:13:13,793 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:13:19,983 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:15:43,210 - INFO - FastMCP initialized successfully
+2025-04-30 20:15:43,211 - INFO - Environment variables loaded
+2025-04-30 20:15:43,333 - INFO - Anthropic client initialized successfully
+2025-04-30 20:15:43,338 - INFO - Starting MCP server...
+2025-04-30 20:15:43,375 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:15:47,164 - INFO - FastMCP initialized successfully
+2025-04-30 20:15:47,165 - INFO - Environment variables loaded
+2025-04-30 20:15:47,340 - INFO - Anthropic client initialized successfully
+2025-04-30 20:15:47,349 - INFO - Starting MCP server...
+2025-04-30 20:15:47,374 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:16:21,363 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:16:38,855 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:16:41,780 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:16:47,522 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:17:15,314 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:17:21,748 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:17:30,071 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:17:30,093 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:17:30,881 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:17:31,490 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:17:32,078 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:17:32,552 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:17:33,080 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:18:07,434 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:18:14,237 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:18:20,556 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:18:21,629 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 20:19:47,453 - INFO - FastMCP initialized successfully
+2025-04-30 20:19:47,454 - INFO - Environment variables loaded
+2025-04-30 20:19:47,629 - INFO - Anthropic client initialized successfully
+2025-04-30 20:19:47,636 - INFO - Starting MCP server...
+2025-04-30 20:19:47,658 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:19:51,825 - INFO - FastMCP initialized successfully
+2025-04-30 20:19:51,827 - INFO - Environment variables loaded
+2025-04-30 20:19:51,974 - INFO - Anthropic client initialized successfully
+2025-04-30 20:19:51,981 - INFO - Starting MCP server...
+2025-04-30 20:19:52,010 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:31:38,512 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:31:57,491 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:32:00,850 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:32:06,066 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:32:25,208 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:32:30,616 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:32:39,476 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:32:39,508 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:32:40,294 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:32:40,814 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:32:41,396 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:32:41,900 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:32:42,538 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-04-30 20:33:22,799 - INFO - Processing request of type ListToolsRequest
+2025-04-30 20:33:30,435 - INFO - Processing request of type CallToolRequest
+2025-04-30 20:33:36,158 - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-30 20:33:37,458 - INFO - Sent reminder to ai.goals.coach@gmail.com
+2025-04-30 21:08:04,953 - INFO - FastMCP initialized successfully
+2025-04-30 21:08:04,955 - INFO - Environment variables loaded
+2025-04-30 21:08:05,057 - INFO - Anthropic client initialized successfully
+2025-04-30 21:08:05,062 - INFO - Starting MCP server...
+2025-04-30 21:08:05,077 - INFO - Processing request of type ListToolsRequest

@@ -564,6 +564,7 @@ def send_reminder_email(email: str, message: str, subject: str, phase: str, msg_
         email_server = os.getenv("EMAIL_SERVER", "smtp.mail.yahoo.com")
         email_port = int(os.getenv("EMAIL_PORT", "587"))
         
+        print(email_user, email_password, email_server)
         if not email_user or not email_password:
             logger.error("Missing email credentials")
             return False
@@ -604,3 +605,14 @@ def send_reminder_email(email: str, message: str, subject: str, phase: str, msg_
     except Exception as e:
         logger.error(f"Failed to send email: {str(e)}")
         return False
+    
+
+if __name__ == "__main__":
+    email = "ai.goals.coach@gmail.com"
+    sent = send_reminder_email(email="ai.goals.coach@gmail.com",  
+                                   subject="🎯Goal Assistant - Your plan is ready!", 
+                                   message="testtesttest",
+                                   phase="completion",
+                                   msg_id=None,
+                                   references=None
+        )
