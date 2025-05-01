@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import ReactMardown from "react-markdown"
 
 interface TimelineTask {
   id: number;
@@ -213,7 +214,7 @@ export function ChatInterface({
                   : "bg-white border"
               }`}
             >
-              {message.content}
+              <ReactMardown>{message.content}</ReactMardown>
             </div>
           </div>
         ))}

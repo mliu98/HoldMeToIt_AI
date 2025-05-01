@@ -1,5 +1,6 @@
 
 import { cn } from "@/lib/utils";
+import ReactMardown from "react-markdown"
 
 interface ChatMessageProps {
   message: string;
@@ -16,7 +17,7 @@ export function ChatMessage({ message, isBot }: ChatMessageProps) {
           : "gradient-purple text-white self-end rounded-tr-sm"
       )}
     >
-      {message}
+    <ReactMardown>{message}</ReactMardown>  
     </div>
   );
 }
